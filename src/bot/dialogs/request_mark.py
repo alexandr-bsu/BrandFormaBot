@@ -27,11 +27,12 @@ async def order_mark_clicked(callback: CallbackQuery, button: Button, manager: D
         await manager.next()
 
     if callback.data == 'good_order':
-        requests.post('https://n8n.startup-integrations.ru/webhook-test/receive',
+        requests.post('https://n8n.startup-integrations.ru/webhook/receive-reviews',
                       data={'tg_id': callback.from_user.id,
                             'tg_username': callback.from_user.username,
                             'tg_name': callback.from_user.first_name,
                             'mark': '😊',
+                            'review': '',
                             'order_number': manager.dialog_data['api_info']['order_number']})
         await manager.switch_to(OrderSG.good_mark)
 
@@ -44,7 +45,7 @@ async def on_review_send(message: Message, widget: MessageInput, manager: Dialog
 
 
 async def process_result(result: Any, dialog_manager: DialogManager):
-    requests.post('https://n8n.startup-integrations.ru/webhook-test/receive',
+    requests.post('https://n8n.startup-integrations.ru/webhook/receive-reviews',
                   data={'tg_id': dialog_manager.event.from_user.id,
                         'tg_username': dialog_manager.event.from_user.username,
                         'tg_name': dialog_manager.event.from_user.first_name,
