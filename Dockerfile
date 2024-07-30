@@ -10,4 +10,4 @@ RUN pip install -r requirements.txt
 COPY . .
 
 CMD python -m src.api.main
-
+CMD python -m src.bot.main

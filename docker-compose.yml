@@ -8,7 +8,7 @@ services:
     command: ["python -m src.api.main"]
 
   bot:
-    container_name: not
+    container_name: bot
     build:
       context: .
     command: [ "python -m src.bot.main" ]
