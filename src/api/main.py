@@ -27,4 +27,4 @@ async def get_orders(token: Annotated[Any, Depends(get_token)]):
     return {'token': token}
 
 
-uvicorn.run(app, port=8080)
+uvicorn.run(app, host='0.0.0.0', port=8080)

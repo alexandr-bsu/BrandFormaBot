@@ -1,0 +1,14 @@
+services:
+  api:
+    container_name: api
+    build:
+      context: .
+    ports:
+      - 9999:8080
+    command: ["python -m src.api.main"]
+
+  bot:
+    container_name: not
+    build:
+      context: .
+    command: [ "python -m src.bot.main" ]
