@@ -5,10 +5,10 @@ services:
       context: .
     ports:
       - 9999:8080
-    command: ["python -m src.api.main"]
+    command: "python -m src.api.main"
 
   bot:
     container_name: bot
     build:
       context: .
-    command: [ "python -m src.bot.main" ]
+    command: "python -m src.bot.main"

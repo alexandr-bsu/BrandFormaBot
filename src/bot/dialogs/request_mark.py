@@ -1,4 +1,6 @@
 from typing import Any
+
+import requests
 from aiogram.types import CallbackQuery, Message
 
 from aiogram_dialog import Window
@@ -16,24 +18,40 @@ async def on_dialog_start(start_data: Any, manager: DialogManager):
 
 async def order_mark_clicked(callback: CallbackQuery, button: Button, manager: DialogManager):
     if callback.data == 'bad_order':
+        manager.dialog_data['mark'] = '😭'
         manager.dialog_data['reviewRequestText'] = 'Пожалуйста, напишите, что мы можем исправить'
         await manager.next()
     if callback.data == 'normal_order':
+        manager.dialog_data['mark'] = '😐'
         manager.dialog_data['reviewRequestText'] = 'Пожалуйста, напишите, как мы можем стать лучше'
         await manager.next()
 
     if callback.data == 'good_order':
+        requests.post('https://n8n.startup-integrations.ru/webhook-test/receive',
+                      data={'tg_id': callback.from_user.id,
+                            'tg_username': callback.from_user.username,
+                            'tg_name': callback.from_user.first_name,
+                            'mark': '😊',
+                            'order_number': manager.dialog_data['api_info']['order_number']})
         await manager.switch_to(OrderSG.good_mark)
 
 
 
 async def on_review_send(message: Message, widget: MessageInput, manager: DialogManager):
     await manager.done(result={'mark': manager.dialog_data['mark'], 'review': message.text})
+    print('test')
     await message.answer('Спасибо за оставленный отзыв! Вы делаете нас лучше')
 
 
 async def process_result(result: Any, dialog_manager: DialogManager):
-    # Отправить на сервер ...
+    requests.post('https://n8n.startup-integrations.ru/webhook-test/receive',
+                  data={'tg_id': dialog_manager.event.from_user.id,
+                        'tg_username': dialog_manager.event.from_user.username,
+                        'tg_name': dialog_manager.event.from_user.first_name,
+                        'mark': result['mark'],
+                        'review': result['review'],
+                        'order_number': dialog_manager.dialog_data['api_info']['order_number']},
+                  )
     return result
 
 
