@@ -37,7 +37,6 @@ async def order_mark_clicked(callback: CallbackQuery, button: Button, manager: D
         await manager.switch_to(OrderSG.good_mark)
 
 
-
 async def on_review_send(message: Message, widget: MessageInput, manager: DialogManager):
     await manager.done(result={'mark': manager.dialog_data['mark'], 'review': message.text})
     print('test')
@@ -75,7 +74,6 @@ review_window = Window(
     Back(text=Const("Назад")),
     state=OrderSG.review
 )
-
 
 good_mark_window = Window(
     Const("Очень рады, что Вам понравилось, мы стараемся ради таких приятных моментов 😍\n\n"
